@@ -13,7 +13,7 @@ public class ClienteHandler extends Thread {
 	public ClienteHandler(Socket socket, ServidorChat servidor) {
 		this.socket = socket;
 		this.servidor = servidor;
-		
+		// teste aq
 		try {
 			entrada = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			saida = new PrintWriter(socket.getOutputStream(), true);
