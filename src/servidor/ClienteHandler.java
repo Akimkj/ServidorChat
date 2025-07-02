@@ -151,7 +151,6 @@ public class ClienteHandler extends Thread {
                 cliente.sairDaSala(); // Garante que o cliente seja removido corretamente
             }
 
-            // Agora que está vazia, podemos removê-la
             servidor.removerSala(nomeSala);
             enviarMensagem("Sala '" + nomeSala + "' foi removida com sucesso.");
         }else {
@@ -180,7 +179,7 @@ public class ClienteHandler extends Thread {
             servidor.removerCliente(this);
             socket.close();
             //servidor.getClientesConectados().remove(this);
-            System.out.println("cliente.Cliente desconectado: " + nomeUsuario +
+            System.out.println("Cliente desconectado: " + nomeUsuario +
                     " (IP: " + socket.getInetAddress().getHostAddress() + ")");
         } catch (IOException e) {
             System.out.println("Erro ao desconectar cliente: " + e.getMessage());

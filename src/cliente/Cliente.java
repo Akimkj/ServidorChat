@@ -58,8 +58,9 @@ public class Cliente {
     }
 
     // Método main para iniciar o cliente
+
     public static void main(String[] args) {
         Cliente cliente = new Cliente();
-        cliente.conectar("localhost", 12345); 
+        cliente.conectar("172.29.175.25", 12345); // Altere o IP/porta se necessário
     }
 }
