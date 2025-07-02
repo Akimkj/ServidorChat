@@ -60,6 +60,6 @@ public class Cliente {
     // Método main para iniciar o cliente
     public static void main(String[] args) {
         Cliente cliente = new Cliente();
-        cliente.conectar("localhost", 12345); // Altere o IP/porta se necessário
+        cliente.conectar("localhost", 12345); 
     }
 }
