@@ -2,17 +2,19 @@ package cliente;
 
 import java.io.*;
 import java.net.Socket;
-
+/*A classe Cliente é a responsável por estabelecer  a conexão com o servidor e o envio de mensagens*/
 public class Cliente {
+    //
+    private Socket socket; // estabelece e mantem conexão com o servidor
+    private BufferedReader teclado; //ler a entrada do usuariom pelo teclado
+    private BufferedReader entradaServidor; //ler as entradas enviadas do servidor
+    private PrintWriter saidaServidor; // para enviar mensagens e comandos ao servidor
+    private String nomeUsuario; // Nome escolhido pelo Usuário para se conectar
 
-    private Socket socket;
-    private BufferedReader teclado;
-    private BufferedReader entradaServidor;
-    private PrintWriter saidaServidor;
-    private String nomeUsuario;
 
+    //Método construtor que recebe o endereço IP e a porta do servidor
     public void conectar(String endereco, int porta) {
-        try {
+        try { // tenta criar o fluxo de dados com o cliente
             socket = new Socket(endereco, porta);
             teclado = new BufferedReader(new InputStreamReader(System.in));
             entradaServidor = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -22,24 +24,26 @@ public class Cliente {
             nomeUsuario = teclado.readLine();
             saidaServidor.println(nomeUsuario);
 
-            // Thread para receber mensagens do servidor
+            // Thread para receber e enviar mensagens para o  servidor
             new Thread(this::receberMensagens).start();
 
-            // Enviar comandos digitados pelo usuário
+            // Loop principal para enviar comandos digitados pelo usuário.
             String comando;
             while ((comando = teclado.readLine()) != null) {
                 enviarComando(comando);
             }
 
-        } catch (IOException e) {
+        } catch (IOException e) { //Se falhar a atribuição de streams, emite uma erro
             System.out.println("Erro ao conectar ao servidor: " + e.getMessage());
         }
     }
 
+    // Envia um comando ou mensagem para o servidor.
     public void enviarComando(String comando) {
         saidaServidor.println(comando);
     }
 
+    //escuta continuamente por mensagens recebidas do servidor e as imprime terminal.
     public void receberMensagens() {
         String mensagem;
         try {

@@ -3,12 +3,13 @@ package servidor;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
+/*A classe SalaChat é responsável pelo funcionamento e estrutura de cada sala de chat presente no servidor */
 public class SalaChat {
-    private String nomeSala;
-    private ArrayList<ClienteHandler> usuarios = new ArrayList<>();
-    private ClienteHandler administrador;
+    private String nomeSala; //Nome da sala de chat
+    private ArrayList<ClienteHandler> usuarios = new ArrayList<>(); //Lista dos membros de uma sala
+    private ClienteHandler administrador; // administrador da sala
 
+    //Método construtor
     public SalaChat( String nomeSala){
         this.nomeSala = nomeSala;
     }
@@ -25,7 +26,7 @@ public class SalaChat {
         }
         cliente.enviarMensagem("[INFO] Você entrou na sala: " + nomeSala);
 
-        // Definir administrador
+        // Definir administrador como sendo o primeiro membro da sala, garantindo que todos os outros não sejam ADM
         if (usuarios.size() == 1) {
             administrador = cliente;
             cliente.setEhAdmin(true);
@@ -44,7 +45,7 @@ public class SalaChat {
             cliente.setEhAdmin(false);
             administrador = null;
 
-            // Se ainda houver usuários na sala, o primeiro vira o novo admin
+            // Se ainda houver usuários na sala, o primeiro usuario da lista vira o novo admin
             if (!usuarios.isEmpty()) {
                 ClienteHandler novoAdmin = usuarios.get(0);
                 administrador = novoAdmin;
@@ -63,11 +64,11 @@ public class SalaChat {
     
     //método para expulsar usuário 
     public void expulsarUsuario(String nomeUsuario, ClienteHandler quemChamou) {
-        if (!quemChamou.equals(administrador) ) {
+        if (!quemChamou.equals(administrador) ) { //Se quem chamou o método não é ADM, não há permissão para expulsar
             quemChamou.enviarMensagem("Você não tem permissão para expulsar usuários.");
             return;
         }
-        if(quemChamou.equals(administrador) && !quemChamou.getNomeUsuario().equals(nomeUsuario)){
+        if(quemChamou.equals(administrador) && !quemChamou.getNomeUsuario().equals(nomeUsuario)){ //Garante que o administrador não pode se expulsar
             Iterator<ClienteHandler> iterator = usuarios.iterator();
             while (iterator.hasNext()) {
                 ClienteHandler cliente = iterator.next();
@@ -85,6 +86,7 @@ public class SalaChat {
             quemChamou.enviarMensagem("Você nao pode expulsar a si mesmo");
     }
 
+    //Método para listar todos os usuários da sala
     public List<String> listarNomesUsuarios() {
         List<String> nomes = new ArrayList<>();
         for (ClienteHandler cliente : usuarios) {
@@ -97,6 +99,7 @@ public class SalaChat {
         return nomes;
     }
 
+    // promove um usuário para administrador, apenas um ADM pode promover outro usuário
     public void promoverAdministrador(String nomeUsuario, ClienteHandler quemChamou) {
         if (!quemChamou.equals(administrador)) {
             quemChamou.enviarMensagem("Apenas o administrador pode promover outro usuário.");
@@ -114,6 +117,8 @@ public class SalaChat {
 
         quemChamou.enviarMensagem("Usuário '" + nomeUsuario + "' não encontrado na sala.");
     }
+
+    //Getters e Setters importantes
 
     public String getNomeSala(){
         return nomeSala;
